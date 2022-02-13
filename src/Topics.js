@@ -14,7 +14,8 @@ function Topics() {
 
     useEffect(() => {
         console.log('topics', topics);
-    }, [topics])
+        setTopic({categoryId:categories?.[0]?.id});
+    }, [topics,categories, setTopic])
 
     return (
         <div className="Topics">
@@ -51,9 +52,7 @@ function TopicForm() {
         } else {
             dispatch(addTopic(topic));
         }
-
-
-        setTopic({title: ''});
+        setTopic({title: '', categoryId: categories[0].id});
         e.target.reset();
     }, [topic, setTopic]);
 
@@ -62,14 +61,14 @@ function TopicForm() {
                onChange={(e) => {
                    setTopic({...topic, title: e.target.value})
                }}/>
-        <select defaultValue={topic.categoryId??categories[0]} onChange={(e) => {
+        <select value={topic.categoryId} onChange={(e) => {
             console.log(e.target.value)
             setTopic({...topic, categoryId: e.target.value})
         }}>{categories.map((el) => (
-            <option value={el.id}>{el.title}</option>))}</select>
+            <option key={el.id} value={el.id}>{el.title}</option>))}</select>
         <input type="submit" value={topic.id ? 'Edit' : 'Add'}/>
         <input type="reset" value='Reset' onClick={() => {
-            setTopic({title: ''});
+            setTopic({title: '', categoryId: categories[0].id});
         }}/>
     </form>);
 }
@@ -87,6 +86,7 @@ function TopicTr({item, index, category}) {
         <td>{item.title}</td>
         <td>{category.title}</td>
         <td><FontAwesomeIcon icon={faPencilAlt} onClick={() => {
+            console.log(item)
             setTopic({...item})
         }}/></td>
         <td><FontAwesomeIcon icon={faTrash} onClick={() => {
