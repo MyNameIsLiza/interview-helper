@@ -1,6 +1,5 @@
 import './App.css';
-import axios from "axios";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect} from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -10,51 +9,35 @@ import {
 import Categories from "./Categories";
 import {getCategories} from "./store/actions/categoriesAction";
 import {useDispatch} from "react-redux";
-
-async function addCategory(category) {
-    const response = await axios.post("https://interview-helper-api.herokuapp.com/api/categories/add", {
-        "title": category.title
-    });
-    return response.data;
-}
-
-async function getAllCategories() {
-    const response = await axios.get("https://interview-helper-api.herokuapp.com/api/categories");
-    return response.data;
-}
-
-async function getAllTopics() {
-    const response = await axios.get("https://interview-helper-api.herokuapp.com/api/topics");
-    return response.data;
-}
+import {getTopics} from "./store/actions/topicsAction";
+import Topics from "./Topics";
 
 function App() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCategories());
+        dispatch(getTopics());
     }, [dispatch]);
 
     return (
         <div className="App">
             <Router>
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/categories">Categories</Link>
-                    </li>
-                    <li>
-                        <Link to="/topics">Topics</Link>
-                    </li>
-                </ul>
-            </nav>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/categories">Categories</Link>
+                        </li>
+                        <li>
+                            <Link to="/topics">Topics</Link>
+                        </li>
+                    </ul>
+                </nav>
                 <Routes>
-                    <Route path='/categories' element={<Categories/>} />
-                    <Route path="/topics">
-
-                    </Route>
+                    <Route path='/categories' element={<Categories/>}/>
+                    <Route path="/topics" element={<Topics/>}/>
                     <Route path="/">
 
                     </Route>
