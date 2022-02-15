@@ -14,13 +14,13 @@ import {
 } from './types';
 
 import axios from 'axios';
+import {getQuestions} from "./questionsAction";
 
 export const addTopic = (topic) => {
     return dispatch => {
         dispatch(addTopicStarted());
         axios.post("https://interview-helper-api.herokuapp.com/api/topics/add", topic)
             .then(res => {
-                console.log('RES', res.data.result)
                 dispatch(addTopicSuccess(res.data.result));
             })
             .catch(err => {
@@ -48,6 +48,7 @@ export const deleteTopic = (id) => {
         axios.delete(`https://interview-helper-api.herokuapp.com/api/topics/${id}`)
             .then(res => {
                 dispatch(deleteTopicSuccess(res.data.result));
+                dispatch(getQuestions());
             })
             .catch(err => {
                 dispatch(deleteTopicFailure(err.message));

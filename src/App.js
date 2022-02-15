@@ -11,12 +11,15 @@ import {getCategories} from "./store/actions/categoriesAction";
 import {useDispatch} from "react-redux";
 import {getTopics} from "./store/actions/topicsAction";
 import Topics from "./Topics";
+import Questions from "./Questions";
+import {getQuestions} from "./store/actions/questionsAction";
 
 function App() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCategories());
         dispatch(getTopics());
+        dispatch(getQuestions());
     }, [dispatch]);
 
     return (
@@ -33,11 +36,15 @@ function App() {
                         <li>
                             <Link to="/topics">Topics</Link>
                         </li>
+                        <li>
+                            <Link to="/questions">Questions</Link>
+                        </li>
                     </ul>
                 </nav>
                 <Routes>
                     <Route path='/categories' element={<Categories/>}/>
                     <Route path="/topics" element={<Topics/>}/>
+                    <Route path="/questions" element={<Questions/>}/>
                     <Route path="/">
 
                     </Route>

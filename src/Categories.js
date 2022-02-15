@@ -48,14 +48,11 @@ function CategoryForm() {
         } else {
             dispatch(addCategory(category));
         }
-
-
         setCategory({title: ''});
-        e.target.reset();
-    }, [category, setCategory]);
+    }, [category, setCategory, dispatch]);
 
     return (<form className="CategoryForm" onSubmit={submitForm}>
-        <input type="text" defaultValue={category.title}
+        <input placeholder="Title" type="text" value={category.title}
                onChange={(e) => {
                    setCategory({...category, title: e.target.value})
                }}/>
@@ -71,7 +68,6 @@ function CategoryTr({item, index}) {
     const dispatch = useDispatch();
 
     const deleteCategoryClick = useCallback((e) => {
-        console.log('uu', e)
         dispatch(deleteCategory(e.id));
     }, [dispatch])
 

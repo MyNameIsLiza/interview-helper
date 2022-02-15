@@ -14,8 +14,8 @@ function Topics() {
 
     useEffect(() => {
         console.log('topics', topics);
-        setTopic({categoryId:categories?.[0]?.id});
-    }, [topics,categories, setTopic])
+        setTopic({categoryId: categories?.[0]?.id});
+    }, []);
 
     return (
         <div className="Topics">
@@ -32,7 +32,11 @@ function Topics() {
                     </tr>
                     </thead>
                     <tbody>
-                    {topics.map((item, index) => <TopicTr key={item.id} {...{item, index, category:categories.find((el)=>el.id===item.categoryId)}}/>)}
+                    {topics.map((item, index) => <TopicTr key={item.id} {...{
+                        item,
+                        index,
+                        category: categories.find((el) => el.id === item.categoryId)
+                    }}/>)}
                     </tbody>
                 </table>
             </TopicsContext.Provider>
@@ -53,16 +57,14 @@ function TopicForm() {
             dispatch(addTopic(topic));
         }
         setTopic({title: '', categoryId: categories[0].id});
-        e.target.reset();
-    }, [topic, setTopic]);
+    }, [topic, setTopic, categories, dispatch]);
 
     return (<form className="TopicForm" onSubmit={submitForm}>
-        <input type="text" defaultValue={topic.title}
+        <input type="text" value={topic.title}
                onChange={(e) => {
                    setTopic({...topic, title: e.target.value})
                }}/>
         <select value={topic.categoryId} onChange={(e) => {
-            console.log(e.target.value)
             setTopic({...topic, categoryId: e.target.value})
         }}>{categories.map((el) => (
             <option key={el.id} value={el.id}>{el.title}</option>))}</select>
@@ -76,7 +78,6 @@ function TopicForm() {
 function TopicTr({item, index, category}) {
     const {setTopic} = useContext(TopicsContext);
     const dispatch = useDispatch();
-
     const deleteTopicClick = useCallback((e) => {
         dispatch(deleteTopic(e.id));
     }, [dispatch])
@@ -86,7 +87,6 @@ function TopicTr({item, index, category}) {
         <td>{item.title}</td>
         <td>{category.title}</td>
         <td><FontAwesomeIcon icon={faPencilAlt} onClick={() => {
-            console.log(item)
             setTopic({...item})
         }}/></td>
         <td><FontAwesomeIcon icon={faTrash} onClick={() => {

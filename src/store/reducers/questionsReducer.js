@@ -1,98 +1,98 @@
 import {
-    ADD_TOPIC_SUCCESS,
-    ADD_TOPIC_FAILURE,
-    ADD_TOPIC_STARTED,
-    EDIT_TOPIC_SUCCESS,
-    EDIT_TOPIC_FAILURE,
-    EDIT_TOPIC_STARTED,
-    GET_TOPICS_FAILURE,
-    GET_TOPICS_STARTED,
-    GET_TOPICS_SUCCESS,
-    DELETE_TOPIC_STARTED,
-    DELETE_TOPIC_SUCCESS,
-    DELETE_TOPIC_FAILURE
+    ADD_QUESTION_SUCCESS,
+    ADD_QUESTION_FAILURE,
+    ADD_QUESTION_STARTED,
+    EDIT_QUESTION_SUCCESS,
+    EDIT_QUESTION_FAILURE,
+    EDIT_QUESTION_STARTED,
+    GET_QUESTIONS_FAILURE,
+    GET_QUESTIONS_STARTED,
+    GET_QUESTIONS_SUCCESS,
+    DELETE_QUESTION_STARTED,
+    DELETE_QUESTION_SUCCESS,
+    DELETE_QUESTION_FAILURE
 } from '../actions/types';
 
 const initialState = {
     loading: false,
-    topics: [],
+    questions: [],
     error: null
 };
 
-export default function topicsReducer(state = initialState, action) {
+export default function questionsReducer(state = initialState, action) {
     switch (action.type) {
-        case GET_TOPICS_STARTED:
+        case GET_QUESTIONS_STARTED:
             return {
                 ...state,
                 loading: true
             };
-        case GET_TOPICS_SUCCESS:
+        case GET_QUESTIONS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: null,
-                topics: [...action.payload]
+                questions: [...action.payload]
             };
-        case GET_TOPICS_FAILURE:
+        case GET_QUESTIONS_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error
             };
-        case ADD_TOPIC_STARTED:
+        case ADD_QUESTION_STARTED:
             return {
                 ...state,
                 loading: true
             };
-        case ADD_TOPIC_SUCCESS:
+        case ADD_QUESTION_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: null,
-                topics: [...state.topics, action.payload]
+                questions: [...state.questions, action.payload]
             };
-        case ADD_TOPIC_FAILURE:
+        case ADD_QUESTION_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error
             };
-        case EDIT_TOPIC_STARTED:
+        case EDIT_QUESTION_STARTED:
             return {
                 ...state,
                 loading: true
             };
-        case EDIT_TOPIC_SUCCESS:
-            const index = state.topics.findIndex((el) => el.id === action.payload.id);
-            state.topics[index] = {...state.topics[index], ...action.payload};
+        case EDIT_QUESTION_SUCCESS:
+            const index = state.questions.findIndex((el) => el.id === action.payload.id);
+            state.questions[index] = {...state.questions[index], ...action.payload};
             return {
                 ...state,
                 loading: false,
                 error: null,
-                topics: [...state.topics]
+                questions: [...state.questions]
             };
-        case EDIT_TOPIC_FAILURE:
+        case EDIT_QUESTION_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: action.payload.error
             };
-        case DELETE_TOPIC_STARTED:
+        case DELETE_QUESTION_STARTED:
             return {
                 ...state,
                 loading: true
             };
-        case DELETE_TOPIC_SUCCESS:
-            const index2 = state.topics.findIndex((el) => el.id === action.payload.id);
-            const temp = [...state.topics];
+        case DELETE_QUESTION_SUCCESS:
+            const index2 = state.questions.findIndex((el) => el.id === action.payload.id);
+            const temp = [...state.questions];
             temp.splice(index2, 1);
             return {
                 ...state,
                 loading: false,
                 error: null,
-                topics: [...temp]
+                questions: [...temp]
             };
-        case DELETE_TOPIC_FAILURE:
+        case DELETE_QUESTION_FAILURE:
             return {
                 ...state,
                 loading: false,

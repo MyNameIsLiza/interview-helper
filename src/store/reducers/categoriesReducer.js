@@ -17,7 +17,6 @@ const initialState = {
 };
 
 export default function categoriesReducer(state = initialState, action) {
-    console.log('action.payload', action.payload);
     switch (action.type) {
         case GET_CATEGORIES_STARTED:
             return {

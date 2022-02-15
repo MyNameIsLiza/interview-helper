@@ -11,6 +11,8 @@ import {
 } from './types';
 
 import axios from 'axios';
+import {getQuestions} from "./questionsAction";
+import {getTopics} from "./topicsAction";
 
 export const addCategory = (category) => {
     return dispatch => {
@@ -44,6 +46,8 @@ export const deleteCategory = (id) => {
         axios.delete(`https://interview-helper-api.herokuapp.com/api/categories/${id}`)
             .then(res => {
                 dispatch(deleteCategorySuccess(res.data.result));
+                dispatch(getTopics());
+                dispatch(getQuestions());
             })
             .catch(err => {
                 dispatch(deleteCategoryFailure(err.message));
@@ -56,7 +60,6 @@ export const getCategories = () => {
         dispatch(getCategoriesStarted());
         axios.get("https://interview-helper-api.herokuapp.com/api/categories")
             .then(res => {
-                console.log('RES', res.data.result)
                 dispatch(getCategoriesSuccess(res.data.result));
             })
             .catch(err => {
