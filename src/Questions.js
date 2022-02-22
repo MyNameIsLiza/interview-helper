@@ -11,35 +11,45 @@ function Questions() {
     const questions = useSelector((store) => store.questionsReducer.questions);
     const topics = useSelector((store) => store.topicsReducer.topics);
     const [question, setQuestion] = useState({title: '', answer: ''})
+    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('questions', questions);
-        setQuestion({title: '', answer: ''});
-    }, [questions, topics, setQuestion])
+        setQuestion({title: '', answer: '', topicId: topics?.[0]?.id});
+    }, [questions, topics, setQuestion]);
+
+    const deleteQuestionClick = useCallback((e) => {
+        dispatch(deleteQuestion(e.id));
+    }, [dispatch])
 
     return (
         <div className="Questions">
             <QuestionsContext.Provider value={{question, setQuestion}}>
                 <QuestionForm/>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Title</th>
-                        <th>Topic</th>
-                        <th>Answer</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {questions.map((item, index) => <QuestionTr key={item.id} {...{
-                        item,
-                        index,
-                        topic: topics.find((el) => el.id === item.topicId)
-                    }}/>)}
-                    </tbody>
-                </table>
+                <div className="cards">
+                    {questions.map((item, index) =>
+                        <div className="card" key={item.id}>
+                            <div className="card-row">
+                                <h3>{index + 1} {item.title}</h3>
+                            </div>
+                            <div className="card-row"><span>{topics.find((el) => el.id === item.topicId).title}</span>
+                            </div>
+                            <div className="card-row">
+                                <div
+                                    dangerouslySetInnerHTML={{__html: htmlDecode(item?.answer)}}/>
+                            </div>
+                            <div className="card-row">
+                                <FontAwesomeIcon icon={faPencilAlt} onClick={() => {
+                                    setQuestion({...item})
+                                }}/>
+                                <FontAwesomeIcon icon={faTrash} onClick={() => {
+                                    deleteQuestionClick({...item})
+                                }}/>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
             </QuestionsContext.Provider>
         </div>
     );
@@ -84,8 +94,9 @@ function QuestionForm() {
 
 function htmlDecode(input = '') {
     const e = document.createElement('div');
-    input = input.replace('<', '&lt;');
-    input = input.replace('>', '&gt;');
+    input = input.replaceAll('<', '&lt;');
+    input = input.replaceAll('>', '&gt;');
+    console.log('RESULT', input);
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }
@@ -96,7 +107,7 @@ function QuestionTr({item, index, topic}) {
 
     const deleteQuestionClick = useCallback((e) => {
         dispatch(deleteQuestion(e.id));
-    }, [dispatch])
+    }, [dispatch]);
 
     return (<tr data-id={item.id}>
         <td>{index + 1}</td>
