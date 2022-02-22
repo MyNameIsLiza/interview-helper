@@ -11,12 +11,15 @@ function Questions() {
     const questions = useSelector((store) => store.questionsReducer.questions);
     const topics = useSelector((store) => store.topicsReducer.topics);
     const [question, setQuestion] = useState({title: '', answer: ''})
+    const [topic, setTopic] = useState({id:topics?.[0]?.id})
+    const [displayQuestions, setDisplayQuestions] = useState(questions.filter((el)=>el.topicId===topic.id))
     const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('questions', questions);
         setQuestion({title: '', answer: '', topicId: topics?.[0]?.id});
-    }, [questions, topics, setQuestion]);
+        setDisplayQuestions(questions.filter((el)=>el.topicId===topic.id));
+    }, [questions, topics, setQuestion, topic]);
 
     const deleteQuestionClick = useCallback((e) => {
         dispatch(deleteQuestion(e.id));
@@ -26,8 +29,12 @@ function Questions() {
         <div className="Questions">
             <QuestionsContext.Provider value={{question, setQuestion}}>
                 <QuestionForm/>
+                <select value={topic.id} onChange={(e) => {
+                    setTopic({...topic, id: e.target.value})
+                }}>{topics.map((el) => (
+                    <option key={el.id} value={el.id}>{el.title}</option>))}</select>
                 <div className="cards">
-                    {questions.map((item, index) =>
+                    {displayQuestions.map((item, index) =>
                         <div className="card" key={item.id}>
                             <div className="card-row">
                                 <h3>{index + 1} {item.title}</h3>
