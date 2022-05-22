@@ -11,19 +11,19 @@ function Questions() {
     const questions = useSelector((store) => store.questionsReducer.questions);
     const topics = useSelector((store) => store.topicsReducer.topics);
     const [question, setQuestion] = useState({title: '', answer: ''})
-    const [topic, setTopic] = useState({id:topics?.[0]?.id})
-    const [displayQuestions, setDisplayQuestions] = useState(questions.filter((el)=>el.topicId===topic.id))
+    const [topic, setTopic] = useState({id: topics?.[0]?.id})
+    const [displayQuestions, setDisplayQuestions] = useState(questions.filter((el) => el.topicId === topic.id))
     const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('questions', questions);
-        setQuestion({title: '', answer: '', topicId: topics?.[0]?.id});
-        setDisplayQuestions(questions.filter((el)=>el.topicId===topic.id));
+        setQuestion({title: '', answer: '', topicId: topic.id});
+        setDisplayQuestions(questions.filter((el) => el.topicId === topic.id));
     }, [questions, topics, setQuestion, topic]);
 
     const deleteQuestionClick = useCallback((e) => {
         dispatch(deleteQuestion(e.id));
-    }, [dispatch])
+    }, [dispatch]);
 
     return (
         <div className="Questions">
@@ -36,15 +36,17 @@ function Questions() {
                 <div className="cards">
                     {displayQuestions.map((item, index) =>
                         <div className="card" key={item.id}>
-                            <div className="card-row">
-                                <h3>{index + 1} {item.title}</h3>
-                            </div>
-                            <div className="card-row"><span>{topics.find((el) => el.id === item.topicId).title}</span>
-                            </div>
-                            <div className="card-row">
-                                <div
-                                    dangerouslySetInnerHTML={{__html: htmlDecode(item?.answer)}}/>
-                            </div>
+                                <div className="card-row">
+                                    <h3>{index + 1} {item.title}</h3>
+                                </div>
+                                <div className="card-row">
+                                    <span>{topics.find((el) => el.id === item.topicId).title}</span>
+                                </div>
+
+                                <div className="card-row">
+                                    <div
+                                        dangerouslySetInnerHTML={{__html: htmlDecode(item?.answer)}}/>
+                                </div>
                             <div className="card-row">
                                 <FontAwesomeIcon icon={faPencilAlt} onClick={() => {
                                     setQuestion({...item})
@@ -103,7 +105,6 @@ function htmlDecode(input = '') {
     const e = document.createElement('div');
     input = input.replaceAll('<', '&lt;');
     input = input.replaceAll('>', '&gt;');
-    console.log('RESULT', input);
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }
